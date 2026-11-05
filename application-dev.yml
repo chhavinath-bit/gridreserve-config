@@ -1,0 +1,15 @@
+# Local development (docker compose / IDE).
+logging:
+  level:
+    com.gridreserve: DEBUG
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+eureka:
+  instance:
+    # Faster registration and removal while developing.
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15

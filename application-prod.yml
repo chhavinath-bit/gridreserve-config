@@ -1,0 +1,4 @@
+# Deployed environment. Secrets come from environment variables only.
+logging:
+  level:
+    com.gridreserve: INFO

@@ -1,0 +1,16 @@
+# booking-service settings.
+info:
+  service:
+    description: Booking core - catalog, availability, bookings, holds
+
+spring:
+  cloud:
+    openfeign:
+      # Every Feign call runs through a Resilience4j circuit breaker with the client's fallback.
+      circuitbreaker:
+        enabled: true
+      client:
+        config:
+          identity-service:
+            connect-timeout: 1000
+            read-timeout: 2000
