@@ -4,6 +4,16 @@ info:
     description: Booking core - catalog, availability, bookings, holds
 
 spring:
+  # booking_db (one database per service). Host and credentials come from environment variables,
+  # never from this repository. Not refreshable: a datasource is created once at startup.
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/booking_db
+    username: ${BOOKING_DB_USER}
+    password: ${BOOKING_DB_PASSWORD}
+    hikari:
+      # Bounded and named pool (CLAUDE.md §8.3).
+      pool-name: booking-db-pool
+      maximum-pool-size: 10
   cloud:
     openfeign:
       # Every Feign call runs through a Resilience4j circuit breaker with the client's fallback.
