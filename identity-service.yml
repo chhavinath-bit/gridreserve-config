@@ -1,0 +1,4 @@
+# identity-service settings. Token lifetimes, cookie settings and the JWT public key arrive in M1.3.
+info:
+  service:
+    description: Users, login, refresh tokens, JWT signing

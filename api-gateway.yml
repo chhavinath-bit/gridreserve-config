@@ -1,0 +1,50 @@
+# Routes: the gateway is the only public entry point (PLAT-01). Every service lists the path
+# prefixes it owns; there is no catch-all, so route order does not matter and an unknown path
+# gets the gateway's own 404. A new endpoint prefix or a new service needs a line here.
+# /internal/** and actuator paths are never routed.
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          httpclient:
+            connect-timeout: 1000
+            response-timeout: 5s
+          routes:
+            - id: identity-service
+              uri: lb://identity-service
+              predicates:
+                - Path=/api/v1/auth/**,/api/v1/me
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: identity-service
+                    fallbackUri: forward:/fallback/identity-service
+            - id: booking-service
+              uri: lb://booking-service
+              predicates:
+                # Phase 1 prefixes only; /offers and /waitlist are added in Phase 3.
+                - Path=/api/v1/categories/**,/api/v1/countries/**,/api/v1/venues/**,/api/v1/bookables/**,/api/v1/bookings/**,/api/v1/admin/bookings/**,/api/v1/ping/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: booking-service
+                    fallbackUri: forward:/fallback/booking-service
+                # Retry only safe, idempotent requests (RES-03); POST /bookings is never retried here.
+                - name: Retry
+                  args:
+                    retries: 2
+                    methods: GET
+                    statuses: BAD_GATEWAY,SERVICE_UNAVAILABLE
+                    backoff:
+                      firstBackoff: 100ms
+                      maxBackoff: 500ms
+                      factor: 2
+                      basedOnPreviousValue: false
+
+# The gateway's circuit breakers wrap whole routes: allow up to the route timeout (A-25: 5 s).
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 5s
