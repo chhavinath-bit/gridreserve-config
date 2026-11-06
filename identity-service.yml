@@ -1,4 +1,22 @@
-# identity-service settings. Token lifetimes, cookie settings and the JWT public key arrive in M1.3.
+# identity-service settings. Secrets come from environment variables only.
 info:
   service:
     description: Users, login, refresh tokens, JWT signing
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/identity_db
+    username: ${IDENTITY_DB_USER}
+    password: ${IDENTITY_DB_PASSWORD}
+    hikari:
+      pool-name: identity-db-pool
+      maximum-pool-size: 10
+
+gridreserve:
+  jwt:
+    signing:
+      # Must name an entry of gridreserve.jwt.public-keys (application.yml); startup fails otherwise.
+      key-id: dev-2026-11
+      # PEM (PKCS#8), from the environment only (NFR-SEC-02).
+      private-key: ${JWT_PRIVATE_KEY}
+      access-token-ttl: 15m
