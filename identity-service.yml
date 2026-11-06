@@ -20,3 +20,10 @@ gridreserve:
       # PEM (PKCS#8), from the environment only (NFR-SEC-02).
       private-key: ${JWT_PRIVATE_KEY}
       access-token-ttl: 15m
+  auth:
+    refresh:
+      # Refresh-token cookie (FR-AUTH-09, D-37): one token per login, ends after this long without use.
+      ttl: 7d
+      cookie-name: gr_refresh
+      # Secure by default (sent over HTTPS only); identity-service-dev.yml turns it off for http://localhost.
+      cookie-secure: true
