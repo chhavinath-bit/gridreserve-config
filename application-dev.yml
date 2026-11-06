@@ -23,3 +23,8 @@ spring:
       cache:
         # The load balancer caches instance lists; default 35 s delays routing after a fresh start.
         ttl: 5s
+
+gridreserve:
+  web:
+    # The Vite dev server. Refresh and logout accept only this Origin (FR-AUTH-12); CORS at the gateway will too.
+    frontend-origin: http://localhost:5173

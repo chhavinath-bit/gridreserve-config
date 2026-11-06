@@ -2,3 +2,8 @@
 logging:
   level:
     com.gridreserve: INFO
+
+gridreserve:
+  web:
+    # Where the deployed frontend is served from, e.g. https://app.example.com (set with the deploy host, M1.10).
+    frontend-origin: ${FRONTEND_ORIGIN}

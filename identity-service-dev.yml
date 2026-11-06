@@ -1,0 +1,6 @@
+# identity-service, local development only.
+gridreserve:
+  auth:
+    refresh:
+      # Dev runs on plain http://localhost, where a Secure cookie would never be sent back.
+      cookie-secure: false
