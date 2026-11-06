@@ -41,3 +41,23 @@ resilience4j:
     configs:
       default:
         timeout-duration: 3s
+
+# Access tokens (FR-AUTH-06). identity-service signs them; every service verifies them locally with
+# these PUBLIC keys (not secret). Keyed by kid: to rotate, add the new key here, switch identity's
+# signing key-id, and remove the old key once its tokens have expired (A-27).
+# This is the dev key; prod overrides the map in application-prod.yml.
+gridreserve:
+  jwt:
+    issuer: gridreserve-identity
+    audience: gridreserve
+    public-keys:
+      dev-2026-11: |
+        -----BEGIN PUBLIC KEY-----
+        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoTJsNYetHBhwbfpsbkrf
+        frJXyAZTzLF3dDOq57KvJ1ScSggwHFpWhDZ/hzPBpGg+3IXgrpboFcljUxb39Yxo
+        cSCHj6X5ZlVwk3sXhrsTa3UF50lW9nexGj+33fKmBo1ua4MettImJqVC3Ji7bi+5
+        r4OcCZCm5fVnX9L4MT6l4CE4MxqPYwytzS09lnLlwYMR8cjSfi2izxS1cZTYPncY
+        mJtdbl4OnUBI7YSa81zcOOoatWvafWjRts6zY25AV2xs0f/S6NxXdJqZ0AjYrBj1
+        kOsoe4r07jBgDtHGamEQLIYKtuEuQKlVJ2GCP+OZABBYyh5KJ2BgaloECIIKKOaN
+        1QIDAQAB
+        -----END PUBLIC KEY-----
