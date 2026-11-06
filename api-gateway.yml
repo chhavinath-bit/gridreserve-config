@@ -1,6 +1,7 @@
 # Routes: the gateway is the only public entry point (PLAT-01). Every service lists the path
-# prefixes it owns; there is no catch-all, so route order does not matter and an unknown path
-# gets the gateway's own 404. A new endpoint prefix or a new service needs a line here.
+# prefixes it owns; there is no catch-all, so route order does not matter. The token check runs
+# before routing (M1.3c): an unknown path gets 401 without a valid token, and the gateway's own
+# 404 with one. A new endpoint prefix or a new service needs a line here.
 # /internal/** and actuator paths are never routed.
 spring:
   cloud:
