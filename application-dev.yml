@@ -4,6 +4,12 @@ logging:
     com.gridreserve: DEBUG
 
 management:
+  endpoints:
+    web:
+      exposure:
+        # dev only: per-instance counters for the concurrency system test (CONC-10, M1.8). Still needs a
+        # valid token, and the gateway never routes /actuator; prod keeps health and info only.
+        include: health,info,metrics
   endpoint:
     health:
       show-details: always
