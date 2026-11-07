@@ -16,11 +16,48 @@ spring:
       maximum-pool-size: 10
   cloud:
     openfeign:
-      # Every Feign call runs through a Resilience4j circuit breaker with the client's fallback.
+      # Off: resilience is the adapter's job (IdentityGateway: Retry -> CircuitBreaker -> Bulkhead, M1.9).
+      # Spring Cloud's own wrapper would add a second circuit breaker and its default 25-call bulkhead.
       circuitbreaker:
-        enabled: true
+        enabled: false
       client:
         config:
-          identity-service:
+          # Every Feign client (RES-01). Per-client keys would be the client's context ID.
+          default:
             connect-timeout: 1000
             read-timeout: 2000
+
+gridreserve:
+  # Credentials for service tokens from identity-service (D-19). The secret only from the environment.
+  service-client:
+    id: booking-service
+    secret: ${BOOKING_SERVICE_CLIENT_SECRET}
+
+# Policies for calls to identity-service (A-25, REQUIREMENTS §13). Refreshable: scripts/refresh-config.sh.
+resilience4j:
+  circuitbreaker:
+    instances:
+      identity-service:
+        base-config: default
+        # Our request was wrong (4xx) or our own bulkhead was full: not a sign identity is failing.
+        ignore-exceptions:
+          - com.gridreserve.booking.client.IdentityErrors$IdentityRejectedException
+          - io.github.resilience4j.bulkhead.BulkheadFullException
+  retry:
+    instances:
+      identity-service:
+        max-attempts: 3
+        wait-duration: 200ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        enable-randomized-wait: true
+        randomized-wait-factor: 0.5
+        # Only failures a second try can fix: identity's 5xx and network errors or timeouts (RES-03).
+        retry-exceptions:
+          - com.gridreserve.booking.client.IdentityErrors$IdentityUnavailableException
+          - feign.RetryableException
+  bulkhead:
+    instances:
+      identity-service:
+        max-concurrent-calls: 10   # RES-04
+        max-wait-duration: 0

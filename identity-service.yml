@@ -13,6 +13,12 @@ spring:
       maximum-pool-size: 10
 
 gridreserve:
+  # Services that may get service tokens (D-19). Only the SHA-256 of each secret, from the environment.
+  service-clients:
+    token-ttl: 5m
+    clients:
+      booking-service:
+        secret-sha256: ${BOOKING_SERVICE_CLIENT_SECRET_SHA256}
   jwt:
     signing:
       # Must name an entry of gridreserve.jwt.public-keys (application.yml); startup fails otherwise.
