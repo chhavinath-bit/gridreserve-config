@@ -7,9 +7,10 @@ management:
   endpoints:
     web:
       exposure:
-        # dev only: per-instance counters for the concurrency system test (CONC-10, M1.8). Still needs a
-        # valid token, and the gateway never routes /actuator; prod keeps health and info only.
-        include: health,info,metrics
+        # dev only: per-instance counters for the concurrency system test (CONC-10, M1.8) and refresh for
+        # scripts/refresh-config.sh (M1.9). Admin or service token required; the gateway never routes
+        # /actuator to services. prod keeps health and info only until the deploy milestone decides.
+        include: health,info,metrics,refresh
   endpoint:
     health:
       show-details: always
