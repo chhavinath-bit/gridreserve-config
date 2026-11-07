@@ -5,6 +5,14 @@
 # /internal/** and actuator paths are never routed.
 spring:
   cloud:
+    # No bulkhead on gateway routes (ARCHITECTURE §10): the gateway is non-blocking and protected per route
+    # by the circuit breaker and the time limiter; bulkheads belong on each service's outbound clients.
+    # Spring Cloud CircuitBreaker adds one by default (Resilience4j: 25 concurrent calls), which CONC-10 hit
+    # in M1.8: a burst of 50 holds got 25 × 503, and those rejections then opened the circuit breaker.
+    circuitbreaker:
+      bulkhead:
+        resilience4j:
+          enabled: false
     gateway:
       server:
         webflux:
