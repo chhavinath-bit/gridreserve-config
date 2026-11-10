@@ -21,8 +21,8 @@ gridreserve:
         secret-sha256: ${BOOKING_SERVICE_CLIENT_SECRET_SHA256}
   jwt:
     signing:
-      # Must name an entry of gridreserve.jwt.public-keys (application.yml); startup fails otherwise.
-      key-id: dev-2026-11
+      # key-id is per profile (identity-service-dev.yml / -prod.yml). It must name an entry of
+      # gridreserve.jwt.public-keys (application-<profile>.yml) whose private key is JWT_PRIVATE_KEY; startup fails otherwise.
       # PEM (PKCS#8), from the environment only (NFR-SEC-02).
       private-key: ${JWT_PRIVATE_KEY}
       access-token-ttl: 15m

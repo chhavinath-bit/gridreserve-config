@@ -33,5 +33,19 @@ spring:
 
 gridreserve:
   web:
-    # The Vite dev server. Refresh and logout accept only this Origin (FR-AUTH-12); CORS at the gateway will too.
-    frontend-origin: http://localhost:5173
+    # The Vite dev server. Refresh and logout accept only this Origin (FR-AUTH-12). FRONTEND_ORIGIN overrides
+    # it for the laptop demo behind a Cloudflare tunnel (scripts/demo-tunnel.sh, M1.10).
+    frontend-origin: ${FRONTEND_ORIGIN:http://localhost:5173}
+  jwt:
+    # The dev key pair: its private key lives only in each developer's infra/.env (CI makes its own).
+    public-keys:
+      dev-2026-11: |
+        -----BEGIN PUBLIC KEY-----
+        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoTJsNYetHBhwbfpsbkrf
+        frJXyAZTzLF3dDOq57KvJ1ScSggwHFpWhDZ/hzPBpGg+3IXgrpboFcljUxb39Yxo
+        cSCHj6X5ZlVwk3sXhrsTa3UF50lW9nexGj+33fKmBo1ua4MettImJqVC3Ji7bi+5
+        r4OcCZCm5fVnX9L4MT6l4CE4MxqPYwytzS09lnLlwYMR8cjSfi2izxS1cZTYPncY
+        mJtdbl4OnUBI7YSa81zcOOoatWvafWjRts6zY25AV2xs0f/S6NxXdJqZ0AjYrBj1
+        kOsoe4r07jBgDtHGamEQLIYKtuEuQKlVJ2GCP+OZABBYyh5KJ2BgaloECIIKKOaN
+        1QIDAQAB
+        -----END PUBLIC KEY-----

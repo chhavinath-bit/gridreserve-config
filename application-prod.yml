@@ -1,9 +1,24 @@
-# Deployed environment. Secrets come from environment variables only.
+# Deployed environment (M1.10, D-15). Secrets come from environment variables only.
 logging:
   level:
     com.gridreserve: INFO
 
+management:
+  endpoints:
+    web:
+      exposure:
+        # refresh for scripts/refresh-config.sh (PLAT-05), run over SSH on the host; it needs an admin or
+        # service token, and no actuator path of a service is reachable from the internet (Caddy passes only
+        # the gateway's health, the gateway routes no actuator paths). No metrics in prod (nothing scrapes them).
+        include: health,info,refresh
+
 gridreserve:
   web:
-    # Where the deployed frontend is served from, e.g. https://app.example.com (set with the deploy host, M1.10).
+    # The public https:// address (FRONTEND_ORIGIN in the host's .env), e.g. https://203-0-113-5.sslip.io.
+    # Refresh and logout accept only this Origin (FR-AUTH-12).
     frontend-origin: ${FRONTEND_ORIGIN}
+  jwt:
+    # Only the prod key: dev tokens are never accepted here. Its private key exists only on the host.
+    public-keys:
+      # prod-2026-11: added once the host has generated its key pair (scripts/prod/init-env.sh prints it).
+      {}

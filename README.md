@@ -15,10 +15,14 @@ Central runtime configuration for [GridReserve](https://github.com/chhavinath-bi
 
 | File | Contents |
 |---|---|
-| `application.yml`, `application-{dev,prod}.yml` | Shared defaults: actuator, logging, resilience defaults |
+| `application.yml`, `application-{dev,prod}.yml` | Shared defaults: actuator, logging, resilience defaults; the JWT **public** keys per profile (not secret) |
 | `api-gateway.yml` + `-dev` / `-prod` | Routes, CORS, rate limits (Phase 4) |
-| `identity-service.yml` + `-dev` / `-prod` | Token lifetimes, cookie settings, JWT public key (public keys are not secret) |
+| `identity-service.yml` + `-dev` / `-prod` | Token lifetimes, cookie settings; the signing `key-id` per profile |
 | `booking-service.yml` + `-dev` / `-prod` | Job intervals, Feign client timeouts and resilience policies, event subscriptions (Phase 5) |
+
+## Keys per profile
+
+The JWT public keys (`gridreserve.jwt.public-keys`) live in `application-dev.yml` and `application-prod.yml`, never in the shared `application.yml`: Spring merges map entries across profile files, so a key in the shared file would be trusted in every profile. Prod trusts only its own key; its private key exists only on the deploy host.
 
 ## What can change without a restart
 
