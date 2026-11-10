@@ -1,0 +1,7 @@
+# identity-service on the deploy host (M1.10).
+gridreserve:
+  jwt:
+    signing:
+      # The prod key pair was generated on the host (scripts/prod/init-env.sh); only its public key is here,
+      # in application-prod.yml. The refresh cookie stays Secure (identity-service.yml): prod is HTTPS only.
+      key-id: prod-2026-11
