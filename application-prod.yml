@@ -20,5 +20,14 @@ gridreserve:
   jwt:
     # Only the prod key: dev tokens are never accepted here. Its private key exists only on the host.
     public-keys:
-      # prod-2026-11: added once the host has generated its key pair (scripts/prod/init-env.sh prints it).
-      {}
+      # prod-2026-11: generated on the host on 2026-11-11 by scripts/prod/init-env.sh; the private key never leaves it.
+      prod-2026-11: |
+        -----BEGIN PUBLIC KEY-----
+        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy8nfLqNueTyqfFwCL/GB
+        DRFRISXXBDe12Q5t67LgJeQTeVnHJfWW0iIglIElE9xgF7Bery4T2xRl6I0vvYfb
+        ZY4DG5bFompDLVN5xd7cLvZ+a3Na77pyK6eKmtAFhxifiBZfsn/hc1Vmua4T3wjF
+        rCHE8fE89gPzyuaQqdPKI4C28i6AP2rkbnwqg0b0bahHUOLNPqi+3hqME8GfVDoD
+        Yr+x1e7SaYjRwzvlDnYGBjtADu+x+9ChkVc5ji/JseiTO71e1R4BSjVz7yqNCXr8
+        sQIo7yZ+Yj3EIyt07/UUoIHfqQxwIgHaeoD7zJGWXcGMsefxBpgcvSegxt+f8+9c
+        RQIDAQAB
+        -----END PUBLIC KEY-----
